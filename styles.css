@@ -13,7 +13,6 @@ body {
 
 .cards {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 12px;
   padding: 16px;
 }
@@ -24,14 +23,12 @@ body {
   border-radius: 16px;
 }
 
-.badge {
-  padding: 6px 12px;
-  border-radius: 12px;
-}
-
-.insights {
-  padding: 16px;
-  color: #9ca3af;
+input, select, button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
 }
 
 .chat {
@@ -42,14 +39,6 @@ body {
 }
 
 #messages {
-  max-height: 150px;
+  max-height: 120px;
   overflow-y: auto;
-}
-
-#input {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  background: #1f2937;
-  color: white;
 }
