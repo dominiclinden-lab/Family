@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NordicFlow</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css"/>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="app">
+
+    <header class="header">
+      <h1>NordicFlow</h1>
+      <div id="health" class="badge"></div>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <h3>Net Worth</h3>
+        <canvas id="netChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Mortgage</h3>
+        <p id="mortgageInfo"></p>
+      </div>
+
+      <div class="card">
+        <h3>Euribor</h3>
+        <p id="euribor"></p>
+      </div>
+    </section>
+
+    <section class="insights" id="insights"></section>
+
+    <section class="chat">
+      <div id="messages"></div>
+      <input id="input" placeholder="e.g. spent 120 sek food"/>
+    </section>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
