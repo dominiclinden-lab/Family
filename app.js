@@ -3,6 +3,31 @@ import { supabase } from "./supabase.js"
 const input = document.getElementById("input")
 const messages = document.getElementById("messages")
 
+let householdId = null
+
+// INIT USER + HOUSEHOLD
+async function init() {
+  const { data: user } = await supabase.auth.getUser()
+
+  if (!user.user) {
+    const email = prompt("Enter email")
+    await supabase.auth.signInWithOtp({ email })
+    alert("Check your email for login link")
+    return
+  }
+
+  const { data: member } = await supabase
+    .from("household_members")
+    .select("household_id")
+    .eq("user_id", user.user.id)
+    .single()
+
+  householdId = member.household_id
+
+  updateAll()
+  loadEvents()
+}
+
 input.addEventListener("keydown", async (e) => {
   if (e.key === "Enter") {
     const text = input.value
@@ -13,6 +38,7 @@ input.addEventListener("keydown", async (e) => {
     const parsed = parseInput(text)
 
     if (parsed) {
+      parsed.household_id = householdId
       await supabase.from("transactions").insert(parsed)
     }
 
@@ -20,64 +46,32 @@ input.addEventListener("keydown", async (e) => {
   }
 })
 
+// CHAT PARSER
 function parseInput(text) {
   text = text.toLowerCase()
-
-  const amountMatch = text.match(/\d+/)
-  if (!amountMatch) return null
-
-  const amount = parseFloat(amountMatch[0])
+  const amount = parseFloat(text.match(/\d+/)?.[0])
+  if (!amount) return null
 
   if (text.includes("spent")) {
-    return {
-      type: "expense",
-      amount,
-      category: detectCategory(text),
-      currency: text.includes("eur") ? "EUR" : "SEK"
-    }
+    return { type: "expense", amount, category: "general" }
   }
 
-  if (text.includes("salary") || text.includes("income")) {
-    return {
-      type: "income",
-      amount,
-      category: "salary",
-      currency: text.includes("eur") ? "EUR" : "SEK"
-    }
-  }
-
-  if (text.includes("mortgage")) {
-    return {
-      type: "mortgage_payment",
-      amount,
-      category: "housing",
-      currency: "SEK"
-    }
+  if (text.includes("salary")) {
+    return { type: "income", amount, category: "salary" }
   }
 
   return null
 }
 
-function detectCategory(text) {
-  if (text.includes("food")) return "food"
-  if (text.includes("transport")) return "transport"
-  return "general"
-}
-
-async function updateAll() {
-  await updateDashboard()
-  await updateMortgage()
-  await generateInsights()
-}
-
+// DASHBOARD
 async function updateDashboard() {
-  const { data } = await supabase.from("transactions").select("*")
+  const { data } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("household_id", householdId)
 
   let total = 0
-
-  data.forEach(t => {
-    total += t.type === "income" ? t.amount : -t.amount
-  })
+  data.forEach(t => total += t.type === "income" ? t.amount : -t.amount)
 
   document.getElementById("health").innerText =
     total > 0 ? "🟢 Strong" : "🔴 Risk"
@@ -86,42 +80,103 @@ async function updateDashboard() {
     type: "line",
     data: {
       labels: data.map(d => new Date(d.created_at).toLocaleDateString()),
-      datasets: [{ data: data.map((_, i) => total) }]
+      datasets: [{ data: data.map(() => total) }]
     }
   })
 }
 
+// MORTGAGE
+function calculateMonthly(loan, rate, years) {
+  const r = rate / 100 / 12
+  const n = years * 12
+  return loan * (r * (1+r)**n) / ((1+r)**n - 1)
+}
+
+async function saveMortgage() {
+  const loan = parseFloat(document.getElementById("loan").value)
+  const years = parseInt(document.getElementById("years").value)
+  const margin = parseFloat(document.getElementById("margin").value)
+  const euriborType = document.getElementById("euriborType").value
+
+  await supabase.from("mortgage").upsert({
+    household_id: householdId,
+    total_loan: loan,
+    remaining_loan: loan,
+    loan_years: years,
+    margin,
+    euribor_type: euriborType
+  })
+
+  updateMortgage()
+}
+
 async function updateMortgage() {
-  const { data } = await supabase.from("mortgage").select("*").single()
+  const { data } = await supabase
+    .from("mortgage")
+    .select("*")
+    .eq("household_id", householdId)
+    .single()
 
-  const rate = data.euribor_rate + data.margin
+  if (!data) return
 
-  document.getElementById("mortgageInfo").innerText =
-    `Rate: ${rate.toFixed(2)}%`
+  const rate = data.margin + data.euribor_rate
+  const monthly = calculateMonthly(data.remaining_loan, rate, data.loan_years)
+
+  document.getElementById("mortgageInfo").innerHTML =
+    `Rate: ${rate.toFixed(2)}% <br> Monthly: ${monthly.toFixed(0)}`
 
   document.getElementById("euribor").innerText =
-    `${data.euribor_rate.toFixed(2)}%`
+    `${data.euribor_rate}%`
 }
 
+// EURIBOR
 async function updateEuribor() {
-  const res = await fetch("https://api.api-ninjas.com/v1/euribor", {
-    headers: { "X-Api-Key": "YOUR_API_KEY" }
-  })
+  try {
+    const res = await fetch("https://api.api-ninjas.com/v1/euribor", {
+      headers: { "X-Api-Key": "YOUR_API_KEY" }
+    })
 
-  const data = await res.json()
+    const data = await res.json()
 
-  await supabase.from("mortgage").update({
-    euribor_rate: data.rate,
-    last_updated: new Date()
-  })
+    await supabase.from("mortgage")
+      .update({ euribor_rate: data.rate })
+      .eq("household_id", householdId)
+
+  } catch {}
 }
 
+// CALENDAR
+async function addEvent() {
+  const title = document.getElementById("eventTitle").value
+  const date = document.getElementById("eventDate").value
+
+  await supabase.from("events").insert({
+    household_id: householdId,
+    title,
+    event_date: date
+  })
+
+  loadEvents()
+}
+
+async function loadEvents() {
+  const { data } = await supabase
+    .from("events")
+    .select("*")
+    .eq("household_id", householdId)
+
+  document.getElementById("events").innerHTML =
+    data.map(e => `<div>${e.title} - ${e.event_date}</div>`).join("")
+}
+
+// AI INSIGHTS
 async function generateInsights() {
-  const { data } = await supabase.from("transactions").select("*")
+  const { data } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("household_id", householdId)
 
-  let income = 0
-  let expense = 0
-
+  let income = 0, expense = 0
   data.forEach(t => {
     if (t.type === "income") income += t.amount
     else expense += t.amount
@@ -129,17 +184,28 @@ async function generateInsights() {
 
   let insights = []
 
-  if (expense > income) {
-    insights.push("⚠️ Spending exceeds income")
-  }
-
-  if (income - expense > 5000) {
-    insights.push("💡 You can increase savings")
-  }
+  if (expense > income) insights.push("⚠️ Spending too high")
+  if (income - expense > 5000) insights.push("💡 Strong savings potential")
 
   document.getElementById("insights").innerHTML =
     insights.map(i => `<div>${i}</div>`).join("")
 }
 
-updateAll()
-updateEuribor()
+// NOTIFICATIONS
+async function requestNotifications() {
+  if ("Notification" in window) {
+    await Notification.requestPermission()
+  }
+}
+
+// MASTER UPDATE
+async function updateAll() {
+  await updateDashboard()
+  await updateMortgage()
+  await generateInsights()
+}
+
+// INIT
+init()
+requestNotifications()
+setInterval(updateEuribor, 86400000)
