@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NordicFlow</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NordicFlow</title>
 
-  <link rel="stylesheet" href="styles.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
-  <header class="header">
-    <div>
-      <h1>NordicFlow</h1>
-      <p class="sub">Your financial system</p>
-    </div>
-    <div id="health" class="status"></div>
-  </header>
+<header class="header">
+  <div>
+    <h1>NordicFlow</h1>
+    <p class="sub">Financial system</p>
+  </div>
+  <div id="health" class="status"></div>
+</header>
 
-  <!-- AI INSIGHT -->
+<!-- HOME -->
+<section id="home" class="page active">
+
   <section class="ai">
     <div id="insights"></div>
   </section>
 
-  <!-- DASHBOARD -->
-  <section class="grid">
-
+  <div class="grid">
     <div class="card large">
-      <h3>Net Worth</h3>
+      <h3>Net Flow</h3>
       <canvas id="netChart"></canvas>
     </div>
 
@@ -44,30 +43,9 @@
       <h3>Euribor</h3>
       <div id="euribor"></div>
     </div>
+  </div>
 
-  </section>
+</section>
 
-  <!-- CALENDAR -->
-  <section class="card">
-    <h3>Upcoming</h3>
-    <div id="events"></div>
-  </section>
-
-</div>
-
-<!-- FLOATING CHAT -->
-<div class="chat">
-  <input id="input" placeholder="Type: spent 120 food..." />
-</div>
-
-<!-- NAVIGATION -->
-<nav class="nav">
-  <div class="nav-item active">Home</div>
-  <div class="nav-item">Analytics</div>
-  <div class="nav-item">Calendar</div>
-  <div class="nav-item">Settings</div>
-</nav>
-
-<script type="module" src="app.js"></script>
-</body>
-</html>
+<!-- ANALYTICS -->
+<section id
