@@ -24,28 +24,96 @@
 <!-- HOME -->
 <section id="home" class="page active">
 
+  <div class="hero">
+    <h2 id="netWorth">€0</h2>
+    <p>Net Worth</p>
+  </div>
+
   <section class="ai">
-    <div id="insights"></div>
+    <div id="insights">Loading insights...</div>
   </section>
 
   <div class="grid">
-    <div class="card large">
-      <h3>Net Flow</h3>
-      <canvas id="netChart"></canvas>
+
+    <div class="card">
+      <h4>Cash Flow</h4>
+      <div id="cashFlow">0</div>
     </div>
 
     <div class="card">
-      <h3>Mortgage</h3>
-      <div id="mortgageInfo"></div>
+      <h4>Mortgage</h4>
+      <div id="mortgageInfo">Loading...</div>
     </div>
 
     <div class="card">
-      <h3>Euribor</h3>
-      <div id="euribor"></div>
+      <h4>Euribor</h4>
+      <div id="euribor">--%</div>
     </div>
+
   </div>
 
 </section>
 
 <!-- ANALYTICS -->
-<section id
+<section id="analytics" class="page">
+  <div class="card">
+    <h3>Spending Breakdown</h3>
+    <canvas id="pieChart"></canvas>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar" class="page">
+
+  <div class="card">
+    <h3>Add Event</h3>
+    <input id="eventTitle" placeholder="Event">
+    <input id="eventDate" type="date">
+    <button onclick="addEvent()">Add</button>
+  </div>
+
+  <div class="card">
+    <h3>Upcoming</h3>
+    <div id="events"></div>
+  </div>
+
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+
+  <div class="card">
+    <h3>Mortgage Setup</h3>
+    <input id="loan" placeholder="Loan">
+    <input id="years" placeholder="Years">
+    <input id="margin" placeholder="Margin %">
+
+    <select id="euriborType">
+      <option value="12">Euribor 12M</option>
+      <option value="6">Euribor 6M</option>
+      <option value="3">Euribor 3M</option>
+    </select>
+
+    <button onclick="saveMortgage()">Save</button>
+  </div>
+
+</section>
+
+</div>
+
+<!-- CHAT -->
+<div class="chat">
+  <input id="input" placeholder="Type: spent 120 food...">
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-item active" onclick="switchTab('home', this)">Home</div>
+  <div class="nav-item" onclick="switchTab('analytics', this)">Analytics</div>
+  <div class="nav-item" onclick="switchTab('calendar', this)">Calendar</div>
+  <div class="nav-item" onclick="switchTab('settings', this)">Settings</div>
+</nav>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
