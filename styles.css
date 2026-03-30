@@ -1,21 +1,18 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont;
+  font-family: -apple-system;
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: white;
 }
 
-/* Layout */
 .app {
   padding: 20px;
   padding-bottom: 140px;
 }
 
-/* Header */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .sub {
@@ -23,25 +20,19 @@ body {
   color: #94a3b8;
 }
 
-/* Status */
 .status {
   padding: 8px 14px;
   border-radius: 20px;
   background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
 }
 
-/* AI Card */
 .ai {
   margin-top: 16px;
   padding: 18px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #1e293b, #020617);
-  border: 1px solid rgba(255,255,255,0.05);
-  color: #cbd5f5;
+  background: linear-gradient(135deg,#1e293b,#020617);
 }
 
-/* Grid */
 .grid {
   display: grid;
   gap: 14px;
@@ -53,16 +44,20 @@ body {
   border-radius: 20px;
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* Large chart */
 .large {
   height: 240px;
 }
 
-/* Chat */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
 .chat {
   position: fixed;
   bottom: 80px;
@@ -76,12 +71,9 @@ body {
   border-radius: 30px;
   border: none;
   background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
   color: white;
-  font-size: 16px;
 }
 
-/* Bottom nav */
 .nav {
   position: fixed;
   bottom: 0;
@@ -91,13 +83,10 @@ body {
   justify-content: space-around;
   align-items: center;
   background: rgba(2,6,23,0.9);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .nav-item {
   color: #64748b;
-  font-size: 13px;
 }
 
 .nav-item.active {
