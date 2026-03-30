@@ -3,12 +3,12 @@ import { supabase } from "./supabase.js"
 let householdId = null
 
 // NAVIGATION
-window.switchTab = function(tab) {
+window.switchTab = function(tab, el) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"))
   document.getElementById(tab).classList.add("active")
 
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"))
-  event.target.classList.add("active")
+  el.classList.add("active")
 
   if (tab === "analytics") loadAnalytics()
 }
@@ -18,7 +18,7 @@ async function init() {
   const { data: user } = await supabase.auth.getUser()
 
   if (!user.user) {
-    const email = prompt("Email")
+    const email = prompt("Enter email")
     await supabase.auth.signInWithOtp({ email })
     alert("Check email")
     return
@@ -36,7 +36,7 @@ async function init() {
   loadEvents()
 }
 
-// CHAT
+// CHAT INPUT
 document.getElementById("input").addEventListener("keydown", async (e) => {
   if (e.key === "Enter") {
     const text = e.target.value
@@ -60,28 +60,35 @@ document.getElementById("input").addEventListener("keydown", async (e) => {
 
 // DASHBOARD
 async function updateDashboard() {
-  const { data } = await supabase.from("transactions")
-    .select("*").eq("household_id", householdId)
+  const { data } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("household_id", householdId)
 
-  let total = 0
-  data.forEach(t => total += t.type === "income" ? t.amount : -t.amount)
+  let income = 0
+  let expense = 0
+
+  data.forEach(t => {
+    if (t.type === "income") income += t.amount
+    else expense += t.amount
+  })
+
+  const net = income - expense
+
+  document.getElementById("netWorth").innerText = "€" + net.toFixed(0)
+  document.getElementById("cashFlow").innerText =
+    (net > 0 ? "+" : "") + net.toFixed(0)
 
   document.getElementById("health").innerText =
-    total > 0 ? "🟢 Strong" : "🔴 Risk"
-
-  new Chart(document.getElementById("netChart"), {
-    type: "line",
-    data: {
-      labels: data.map(d => d.created_at),
-      datasets: [{ data: data.map(()=>total) }]
-    }
-  })
+    net > 0 ? "🟢 Strong" : "🔴 Risk"
 }
 
 // ANALYTICS
 async function loadAnalytics() {
-  const { data } = await supabase.from("transactions")
-    .select("*").eq("household_id", householdId)
+  const { data } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("household_id", householdId)
 
   let categories = {}
 
@@ -116,8 +123,10 @@ window.addEvent = async function() {
 }
 
 async function loadEvents() {
-  const { data } = await supabase.from("events")
-    .select("*").eq("household_id", householdId)
+  const { data } = await supabase
+    .from("events")
+    .select("*")
+    .eq("household_id", householdId)
 
   document.getElementById("events").innerHTML =
     data.map(e => `<div>${e.title} - ${e.event_date}</div>`).join("")
@@ -141,20 +150,30 @@ window.saveMortgage = async function() {
 }
 
 async function updateMortgage() {
-  const { data } = await supabase.from("mortgage")
-    .select("*").eq("household_id", householdId).single()
+  const { data } = await supabase
+    .from("mortgage")
+    .select("*")
+    .eq("household_id", householdId)
+    .single()
 
-  if (!data) return
+  if (!data) {
+    document.getElementById("mortgageInfo").innerText = "Not set"
+    return
+  }
 
   const rate = data.margin + data.euribor_rate
-  document.getElementById("mortgageInfo").innerText =
-    `Rate ${rate}%`
+
+  document.getElementById("mortgageInfo").innerHTML =
+    `${rate.toFixed(2)}% <br> €${data.remaining_loan}`
+
+  document.getElementById("euribor").innerText =
+    data.euribor_rate.toFixed(2) + "%"
 }
 
 // AI
 async function generateInsights() {
   document.getElementById("insights").innerText =
-    "You are on track. Consider increasing savings."
+    "You're on track. Keep saving consistently."
 }
 
 // MASTER
