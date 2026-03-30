@@ -5,19 +5,20 @@ body {
   color: white;
 }
 
+/* APP */
 .app {
   padding: 20px;
   padding-bottom: 140px;
 }
 
+.hidden {
+  display: none;
+}
+
+/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
-}
-
-.sub {
-  font-size: 12px;
-  color: #94a3b8;
 }
 
 .status {
@@ -28,7 +29,6 @@ body {
 
 /* HERO */
 .hero {
-  margin-top: 10px;
   padding: 20px;
   border-radius: 20px;
   background: linear-gradient(135deg, #1e293b, #020617);
@@ -36,11 +36,6 @@ body {
 
 .hero h2 {
   font-size: 32px;
-  margin: 0;
-}
-
-.hero p {
-  color: #94a3b8;
 }
 
 /* AI */
@@ -64,22 +59,24 @@ body {
   background: rgba(255,255,255,0.05);
 }
 
-.card h4 {
-  color: #94a3b8;
-  margin-bottom: 6px;
+/* NAV */
+.nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 65px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(2,6,23,0.9);
 }
 
-.card div {
-  font-size: 20px;
-  font-weight: bold;
+.nav-item {
+  color: #64748b;
 }
 
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
+.nav-item.active {
+  color: white;
 }
 
 /* CHAT */
@@ -99,22 +96,30 @@ body {
   color: white;
 }
 
-/* NAV */
-.nav {
+/* MODAL */
+.overlay {
   position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 65px;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  background: rgba(2,6,23,0.9);
 }
 
-.nav-item {
-  color: #64748b;
+.modal {
+  background: #111827;
+  padding: 20px;
+  border-radius: 16px;
+  width: 80%;
 }
 
-.nav-item.active {
-  color: white;
+/* SKELETON LOADING */
+.skeleton {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6 }
+  50% { opacity: 1 }
+  100% { opacity: 0.6 }
 }
