@@ -5,68 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NordicFlow</title>
 
-  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css"/>
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+
 <div class="app">
 
-<header class="header">
-  <h1>NordicFlow</h1>
-  <div id="health" class="badge"></div>
-</header>
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <h1>NordicFlow</h1>
+      <p class="sub">Your financial system</p>
+    </div>
+    <div id="health" class="status"></div>
+  </header>
 
-<section class="cards">
-  <div class="card">
-    <h3>Net Flow</h3>
-    <canvas id="netChart"></canvas>
-  </div>
+  <!-- AI INSIGHT -->
+  <section class="ai">
+    <div id="insights"></div>
+  </section>
 
-  <div class="card">
-    <h3>Mortgage</h3>
-    <div id="mortgageInfo"></div>
-  </div>
+  <!-- DASHBOARD -->
+  <section class="grid">
 
-  <div class="card">
-    <h3>Euribor</h3>
-    <div id="euribor"></div>
-  </div>
-</section>
+    <div class="card large">
+      <h3>Net Worth</h3>
+      <canvas id="netChart"></canvas>
+    </div>
 
-<section class="card">
-  <h3>Mortgage Setup</h3>
-  <input id="loan" placeholder="Total Loan (€)" />
-  <input id="years" placeholder="Years" />
-  <input id="margin" placeholder="Margin %" />
+    <div class="card">
+      <h3>Mortgage</h3>
+      <div id="mortgageInfo"></div>
+    </div>
 
-  <select id="euriborType">
-    <option value="12">Euribor 12M</option>
-    <option value="6">Euribor 6M</option>
-    <option value="3">Euribor 3M</option>
-  </select>
+    <div class="card">
+      <h3>Euribor</h3>
+      <div id="euribor"></div>
+    </div>
 
-  <button onclick="saveMortgage()">Save</button>
-</section>
+  </section>
 
-<section class="card">
-  <h3>Calendar</h3>
-  <input id="eventTitle" placeholder="Event name"/>
-  <input id="eventDate" type="date"/>
-  <button onclick="addEvent()">Add Event</button>
-  <div id="events"></div>
-</section>
-
-<section class="insights" id="insights"></section>
-
-<section class="chat">
-  <div id="messages"></div>
-  <input id="input" placeholder="e.g. spent 120 sek food"/>
-</section>
+  <!-- CALENDAR -->
+  <section class="card">
+    <h3>Upcoming</h3>
+    <div id="events"></div>
+  </section>
 
 </div>
+
+<!-- FLOATING CHAT -->
+<div class="chat">
+  <input id="input" placeholder="Type: spent 120 food..." />
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <div class="nav-item active">Home</div>
+  <div class="nav-item">Analytics</div>
+  <div class="nav-item">Calendar</div>
+  <div class="nav-item">Settings</div>
+</nav>
 
 <script type="module" src="app.js"></script>
 </body>
