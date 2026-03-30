@@ -11,41 +11,51 @@
 
 <body>
 
-<div class="app">
+<!-- ONBOARDING -->
+<div id="onboarding" class="overlay hidden">
+  <div class="modal">
+    <h2>Welcome to NordicFlow</h2>
+    <p>Create your household</p>
+
+    <input id="householdName" placeholder="Family name">
+    <button onclick="createHousehold()">Create</button>
+  </div>
+</div>
+
+<div class="app hidden" id="app">
 
 <header class="header">
   <div>
     <h1>NordicFlow</h1>
     <p class="sub">Financial system</p>
   </div>
-  <div id="health" class="status"></div>
+  <div id="health" class="status">...</div>
 </header>
 
-<!-- HOME -->
 <section id="home" class="page active">
 
-  <div class="hero">
+  <div class="hero skeleton" id="hero">
     <h2 id="netWorth">€0</h2>
     <p>Net Worth</p>
   </div>
 
-  <section class="ai">
+  <section class="ai skeleton" id="aiCard">
     <div id="insights">Loading insights...</div>
   </section>
 
   <div class="grid">
 
-    <div class="card">
+    <div class="card skeleton">
       <h4>Cash Flow</h4>
       <div id="cashFlow">0</div>
     </div>
 
-    <div class="card">
+    <div class="card skeleton">
       <h4>Mortgage</h4>
-      <div id="mortgageInfo">Loading...</div>
+      <div id="mortgageInfo">Not set</div>
     </div>
 
-    <div class="card">
+    <div class="card skeleton">
       <h4>Euribor</h4>
       <div id="euribor">--%</div>
     </div>
@@ -54,7 +64,6 @@
 
 </section>
 
-<!-- ANALYTICS -->
 <section id="analytics" class="page">
   <div class="card">
     <h3>Spending Breakdown</h3>
@@ -62,7 +71,6 @@
   </div>
 </section>
 
-<!-- CALENDAR -->
 <section id="calendar" class="page">
 
   <div class="card">
@@ -79,7 +87,6 @@
 
 </section>
 
-<!-- SETTINGS -->
 <section id="settings" class="page">
 
   <div class="card">
@@ -88,25 +95,23 @@
     <input id="years" placeholder="Years">
     <input id="margin" placeholder="Margin %">
 
-    <select id="euriborType">
-      <option value="12">Euribor 12M</option>
-      <option value="6">Euribor 6M</option>
-      <option value="3">Euribor 3M</option>
-    </select>
-
     <button onclick="saveMortgage()">Save</button>
+  </div>
+
+  <div class="card">
+    <h3>Invite Spouse</h3>
+    <input id="inviteEmail" placeholder="Email">
+    <button onclick="invite()">Send Invite</button>
   </div>
 
 </section>
 
 </div>
 
-<!-- CHAT -->
 <div class="chat">
   <input id="input" placeholder="Type: spent 120 food...">
 </div>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-item active" onclick="switchTab('home', this)">Home</div>
   <div class="nav-item" onclick="switchTab('analytics', this)">Analytics</div>
