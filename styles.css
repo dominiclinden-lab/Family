@@ -26,6 +26,24 @@ body {
   background: rgba(255,255,255,0.08);
 }
 
+/* HERO */
+.hero {
+  margin-top: 10px;
+  padding: 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1e293b, #020617);
+}
+
+.hero h2 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.hero p {
+  color: #94a3b8;
+}
+
+/* AI */
 .ai {
   margin-top: 16px;
   padding: 18px;
@@ -33,6 +51,7 @@ body {
   background: linear-gradient(135deg,#1e293b,#020617);
 }
 
+/* GRID */
 .grid {
   display: grid;
   gap: 14px;
@@ -43,11 +62,16 @@ body {
   padding: 18px;
   border-radius: 20px;
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(14px);
 }
 
-.large {
-  height: 240px;
+.card h4 {
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.card div {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .page {
@@ -58,6 +82,7 @@ body {
   display: block;
 }
 
+/* CHAT */
 .chat {
   position: fixed;
   bottom: 80px;
@@ -74,6 +99,7 @@ body {
   color: white;
 }
 
+/* NAV */
 .nav {
   position: fixed;
   bottom: 0;
